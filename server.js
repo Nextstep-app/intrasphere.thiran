@@ -318,8 +318,12 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`INTRASPHERE System Online: Port ${PORT}`);
-    console.log(`Workspace Status: ACTIVE`);
-    console.log(`Internal Monitoring: ENABLED`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`INTRASPHERE System Online: Port ${PORT}`);
+        console.log(`Workspace Status: ACTIVE`);
+        console.log(`Internal Monitoring: ENABLED`);
+    });
+}
+
+module.exports = app;
