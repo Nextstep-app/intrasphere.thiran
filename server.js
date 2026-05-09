@@ -32,9 +32,22 @@ function notifyUsers(db, userIds, title, body, url = '/') {
     });
 }
 
+// Path Detection Logic
+const fs = require('fs');
+const publicPath = path.resolve(__dirname, 'public');
+const rootPath = __dirname;
+const servePath = fs.existsSync(publicPath) ? publicPath : rootPath;
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, 'public')));
+
+// If files are in root (GitHub), map common paths
+if (servePath === rootPath) {
+    app.get('/js/main.js', (req, res) => res.sendFile(path.join(rootPath, 'main.js')));
+    app.get('/css/style.css', (req, res) => res.sendFile(path.join(rootPath, 'style.css')));
+}
+
+app.use(express.static(servePath));
 
 // Login Endpoint
 app.post('/api/login', (req, res) => {
@@ -315,14 +328,10 @@ app.put('/api/notices/:id/response', verifyToken, (req, res) => {
 
 // Serve frontend application for all other routes
 app.get('*', (req, res) => {
-    const indexPath = path.resolve(__dirname, 'public', 'index.html');
-    if (!require('fs').existsSync(indexPath)) {
+    const indexPath = path.resolve(servePath, 'index.html');
+    if (!fs.existsSync(indexPath)) {
         console.error("CRITICAL ERROR: index.html not found at", indexPath);
-        console.log("Current Directory Contents:", require('fs').readdirSync(__dirname));
-        if (require('fs').existsSync(path.join(__dirname, 'public'))) {
-            console.log("Public Directory Contents:", require('fs').readdirSync(path.join(__dirname, 'public')));
-        }
-        return res.status(404).send("Frontend files missing. Please check deployment.");
+        return res.status(404).send("Frontend files missing. Please ensure index.html is in the root or public folder.");
     }
     res.sendFile(indexPath);
 });
