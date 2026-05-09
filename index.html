@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTRASPHERE - Internal Company Operations Portal</title>
+    <link rel="manifest" href="/manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Global Animated Background -->
+    <div id="ambient-background" class="ambient-background"></div>
+
+    <!-- Login View -->
+    <div id="login-view" class="view active-view">
+        <div class="login-container">
+            <!-- Left Side: Visuals -->
+            <div class="login-visuals">
+                <div class="system-status">
+                    <h2>INTRASPHERE</h2>
+                    <p class="subtitle">"Centralized Organizational Operations System"</p>
+                    
+                    <div class="status-indicators">
+                        <div class="status-item">
+                            <span class="indicator active"></span> Workspace Status: ACTIVE
+                        </div>
+                        <div class="status-item">
+                            <span class="indicator active"></span> Internal Monitoring: ENABLED
+                        </div>
+                        <div class="status-item">
+                            <span class="indicator protected"></span> Security Layer: PROTECTED
+                        </div>
+                        <div class="status-item">
+                            <span class="indicator sync"></span> Operations Sync: ONLINE
+                        </div>
+                    </div>
+
+                    <div class="live-clock">
+                        <span id="current-date"></span><br>
+                        <span id="current-time"></span>
+                    </div>
+
+                    <div class="footer-notice">
+                        <i class="fa-solid fa-shield-halved"></i> Authorized Access Only
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Login Panel -->
+            <div class="login-panel">
+                <div class="glass-form">
+                    <h3>Secure Login</h3>
+                    <p>Enter your executive credentials</p>
+                    
+                    <form id="login-form">
+                        <div class="input-group">
+                            <label for="employee-id">Employee ID</label>
+                            <input type="text" id="employee-id" placeholder="e.g. THR-26-LD-001" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="department-select">Department</label>
+                            <select id="department-select" required>
+                                <option value="" disabled selected>Select Department</option>
+                                <option value="Leadership">Leadership</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Research & Development">Research & Development</option>
+                                <option value="Administration">Administration & Operations</option>
+                                <option value="Growth & Business">Growth & Business</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Access Workspace <i class="fa-solid fa-arrow-right"></i></button>
+                            <button type="button" class="btn-secondary">Forgot Password</button>
+                        </div>
+                        <div id="login-error" class="error-msg"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Portal View -->
+    <div id="portal-view" class="view">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="brand">
+                <h2>INTRASPHERE</h2>
+                <span class="dept-badge" id="user-dept-badge">Dept</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li class="active" data-target="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+                <li data-target="circulars"><i class="fa-solid fa-file-contract"></i> Circulars</li>
+                <li data-target="announcements"><i class="fa-solid fa-bullhorn"></i> Announcements</li>
+                <li data-target="tasks"><i class="fa-solid fa-list-check"></i> Tasks</li>
+                <li data-target="meetings"><i class="fa-solid fa-users-viewfinder"></i> Meetings</li>
+                <li data-target="attendance"><i class="fa-solid fa-user-clock"></i> Attendance</li>
+                <li data-target="notices"><i class="fa-solid fa-triangle-exclamation"></i> Notices</li>
+                <li data-target="profile"><i class="fa-solid fa-id-card"></i> Profile</li>
+            </ul>
+
+            <div class="user-info">
+                <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="details">
+                    <span id="user-name">Name</span>
+                    <span id="user-role">Role</span>
+                </div>
+                <button id="logout-btn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search system...">
+                </div>
+                <div class="header-actions">
+                    <div class="system-status-mini">
+                        <span class="indicator active"></span> Sync Online
+                    </div>
+                    <div class="header-clock" id="header-clock"></div>
+                    <button class="notification-btn"><i class="fa-solid fa-bell"></i><span class="badge">3</span></button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div id="dashboard" class="module active-module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1 id="welcome-message">Welcome back, Executive</h1>
+                        <p>Here is your operational overview for today.</p>
+                    </div>
+                    <div class="dept-theme-indicator"></div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="glass-card stat-card">
+                        <i class="fa-solid fa-file-contract stat-icon"></i>
+                        <div class="stat-info">
+                            <h3>Active Circulars</h3>
+                            <h2 id="stat-circulars">--</h2>
+                        </div>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <i class="fa-solid fa-users-viewfinder stat-icon"></i>
+                        <div class="stat-info">
+                            <h3>Upcoming Meetings</h3>
+                            <h2 id="stat-meetings">--</h2>
+                        </div>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <i class="fa-solid fa-list-check stat-icon"></i>
+                        <div class="stat-info">
+                            <h3>Pending Tasks</h3>
+                            <h2 id="stat-tasks">--</h2>
+                        </div>
+                    </div>
+                    <div class="glass-card stat-card warning-stat">
+                        <i class="fa-solid fa-triangle-exclamation stat-icon"></i>
+                        <div class="stat-info">
+                            <h3>Recent Notices</h3>
+                            <h2 id="stat-notices">--</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-bullhorn"></i> Important Announcements</h3>
+                        <ul class="item-list" id="announcements-list">
+                            <li><span class="tag tag-emergency">Emergency</span> Server maintenance at 02:00 AM.</li>
+                            <li><span class="tag tag-internal">Internal</span> Q3 Review Meeting scheduled.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-chart-line"></i> Department Activity</h3>
+                        <div style="position: relative; height:200px; width:100%">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circulars Module -->
+            <div id="circulars" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Circular Management</h1>
+                        <p>Publish and view organizational circulars.</p>
+                    </div>
+                </div>
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-plus"></i> Publish Circular</h3>
+                        <form id="circular-form">
+                            <div class="input-group">
+                                <label>Title</label>
+                                <input type="text" id="circ-title" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Content</label>
+                                <textarea id="circ-content" rows="3" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Category</label>
+                                <select id="circ-category" required>
+                                    <option value="Operational">Operational</option>
+                                    <option value="Technical">Technical</option>
+                                    <option value="HR">HR</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Priority</label>
+                                <select id="circ-priority" required>
+                                    <option value="Normal">Normal</option>
+                                    <option value="High">High</option>
+                                    <option value="Critical">Critical</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Target Departments (comma separated)</label>
+                                <input type="text" id="circ-depts" placeholder="e.g. Technology, Leadership" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Publish Circular</button>
+                        </form>
+                        <p id="circ-unauth-msg" style="color:var(--text-muted); margin-top: 10px; display:none;"><i class="fa-solid fa-lock"></i> Only authorized executives can publish circulars.</p>
+                    </div>
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-list"></i> Recent Circulars</h3>
+                        <ul class="item-list" id="circulars-list">
+                            <li>Loading circulars...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements Module -->
+            <div id="announcements" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Announcements</h1>
+                        <p>Broadcast and view company announcements.</p>
+                    </div>
+                </div>
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-plus"></i> New Announcement</h3>
+                        <form id="announcement-form">
+                            <div class="input-group">
+                                <label>Title</label>
+                                <input type="text" id="ann-title" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Content</label>
+                                <textarea id="ann-content" rows="3" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Type</label>
+                                <select id="ann-type" required>
+                                    <option value="Internal">Internal</option>
+                                    <option value="Emergency">Emergency</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Broadcast</button>
+                        </form>
+                        <p id="ann-unauth-msg" style="color:var(--text-muted); margin-top: 10px; display:none;"><i class="fa-solid fa-lock"></i> Only authorized executives can broadcast announcements.</p>
+                    </div>
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-list"></i> Recent Announcements</h3>
+                        <ul class="item-list" id="announcements-list-main">
+                            <li>Loading announcements...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Module -->
+            <div id="tasks" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Task Management</h1>
+                        <p>Assign and monitor tasks.</p>
+                    </div>
+                </div>
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-plus"></i> Assign Task</h3>
+                        <form id="task-form">
+                            <div class="input-group">
+                                <label>Title</label>
+                                <input type="text" id="task-title" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Description</label>
+                                <textarea id="task-desc" rows="3" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Deadline</label>
+                                <input type="datetime-local" id="task-deadline" required style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);">
+                            </div>
+                            <div class="input-group">
+                                <label>Assign To</label>
+                                <select id="task-assignee" required>
+                                    <option value="">Loading users...</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Assign Task</button>
+                        </form>
+                        <p id="task-unauth-msg" style="color:var(--text-muted); margin-top: 10px; display:none;"><i class="fa-solid fa-lock"></i> Only authorized executives can assign tasks.</p>
+                    </div>
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-list"></i> Task Board</h3>
+                        <ul class="item-list" id="tasks-list">
+                            <li>Loading tasks...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meetings Module -->
+            <div id="meetings" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Meetings</h1>
+                        <p>Schedule and join organizational meetings.</p>
+                    </div>
+                </div>
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-plus"></i> Schedule Meeting</h3>
+                        <form id="meeting-form">
+                            <div class="input-group">
+                                <label>Title</label>
+                                <input type="text" id="meet-title" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Agenda</label>
+                                <textarea id="meet-agenda" rows="3" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Date & Time</label>
+                                <input type="datetime-local" id="meet-datetime" required style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);">
+                            </div>
+                            <div class="input-group">
+                                <label>Target Departments (comma separated)</label>
+                                <input type="text" id="meet-depts" placeholder="e.g. Technology, Leadership" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Meeting Link</label>
+                                <input type="url" id="meet-link" placeholder="https://meet.google.com/..." required>
+                            </div>
+                            <button type="submit" class="btn-primary">Schedule Meeting</button>
+                        </form>
+                        <p id="meet-unauth-msg" style="color:var(--text-muted); margin-top: 10px; display:none;"><i class="fa-solid fa-lock"></i> Only authorized executives can schedule meetings.</p>
+                    </div>
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-video"></i> Upcoming Meetings</h3>
+                        <ul class="item-list" id="meetings-list">
+                            <li>Loading meetings...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Module -->
+            <div id="attendance" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Attendance Management</h1>
+                        <p>Mark and view daily attendance.</p>
+                    </div>
+                </div>
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-user-clock"></i> Mark Attendance</h3>
+                        <form id="attendance-form" style="display:none;">
+                            <div class="input-group">
+                                <label>Employee</label>
+                                <select id="att-user" required>
+                                    <option value="" disabled selected>Select Employee...</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Date</label>
+                                <input type="date" id="att-date" required style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);">
+                            </div>
+                            <div class="input-group">
+                                <label>Status</label>
+                                <select id="att-status" required>
+                                    <option value="Present">Present</option>
+                                    <option value="Leave">Leave</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Mark Attendance</button>
+                            <p id="att-msg" style="margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);"></p>
+                        </form>
+                        <p id="att-unauth-msg" style="color:var(--text-muted); margin-top: 10px; display:none;"><i class="fa-solid fa-lock"></i> Only CEO, COO, and HR can mark attendance.</p>
+                    </div>
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-list"></i> Recent Attendance Log</h3>
+                        <ul class="item-list" id="attendance-list">
+                            <li>Loading attendance...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notices" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Warnings & Notices</h1>
+                        <p>Issue, track, and respond to official compliance notices.</p>
+                    </div>
+                </div>
+                <div class="dashboard-panels">
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-plus"></i> Issue Notice</h3>
+                        <form id="notice-form">
+                            <div class="input-group">
+                                <label>Title</label>
+                                <input type="text" id="notice-title" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Content</label>
+                                <textarea id="notice-content" rows="3" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Issue To</label>
+                                <select id="notice-user" required>
+                                    <option value="" disabled selected>Select Employee...</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Issue Notice</button>
+                        </form>
+                        <p id="notice-unauth-msg" style="color:var(--text-muted); margin-top: 10px; display:none;"><i class="fa-solid fa-lock"></i> Only authorized executives can issue notices. If you have active notices, they will appear on the right.</p>
+                    </div>
+                    <div class="glass-card panel">
+                        <h3><i class="fa-solid fa-list"></i> Notice Board</h3>
+                        <ul class="item-list" id="notices-list">
+                            <li>Loading notices...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Module -->
+            <div id="profile" class="module">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Employee Profile</h1>
+                        <p>View your performance, attendance, and history.</p>
+                    </div>
+                </div>
+                
+                <div style="display:flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <div class="glass-card" style="flex: 1; min-width: 250px; display:flex; flex-direction:column; align-items:center; padding: 2rem; text-align:center;">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary-glow); color: var(--primary); display:flex; align-items:center; justify-content:center; font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h2 id="prof-name">--</h2>
+                        <p id="prof-role" style="color:var(--text-muted); font-size:0.9rem; margin: 5px 0;">--</p>
+                        <p id="prof-dept" class="tag tag-internal" style="margin-top: 5px;">--</p>
+                        <p style="color:var(--text-muted); margin-top: 15px; font-size:0.9rem;">Employee ID: <strong id="prof-id" style="color:var(--text-main);">--</strong></p>
+                    </div>
+                    
+                    <div style="flex: 3; min-width: 300px; display:flex; flex-direction:column; gap: 1.5rem;">
+                        <div class="dashboard-grid" style="margin-bottom:0;">
+                            <div class="glass-card stat-card">
+                                <i class="fa-solid fa-check-circle stat-icon" style="color:var(--success);"></i>
+                                <div class="stat-info">
+                                    <h3>Completed Tasks</h3>
+                                    <h2 id="prof-stat-tasks">0</h2>
+                                </div>
+                            </div>
+                            <div class="glass-card stat-card">
+                                <i class="fa-solid fa-clock-rotate-left stat-icon" style="color:var(--primary);"></i>
+                                <div class="stat-info">
+                                    <h3>Attendance Rate</h3>
+                                    <h2 id="prof-stat-att">0%</h2>
+                                </div>
+                            </div>
+                            <div class="glass-card stat-card warning-stat">
+                                <i class="fa-solid fa-triangle-exclamation stat-icon"></i>
+                                <div class="stat-info">
+                                    <h3>Active Notices</h3>
+                                    <h2 id="prof-stat-notices">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card panel">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Personal Productivity Trend</h3>
+                            <div style="position: relative; height:250px; width:100%">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
