@@ -34,7 +34,7 @@ function notifyUsers(db, userIds, title, body, url = '/') {
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 // Login Endpoint
 app.post('/api/login', (req, res) => {
@@ -315,7 +315,16 @@ app.put('/api/notices/:id/response', verifyToken, (req, res) => {
 
 // Serve frontend application for all other routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    const indexPath = path.resolve(__dirname, 'public', 'index.html');
+    if (!require('fs').existsSync(indexPath)) {
+        console.error("CRITICAL ERROR: index.html not found at", indexPath);
+        console.log("Current Directory Contents:", require('fs').readdirSync(__dirname));
+        if (require('fs').existsSync(path.join(__dirname, 'public'))) {
+            console.log("Public Directory Contents:", require('fs').readdirSync(path.join(__dirname, 'public')));
+        }
+        return res.status(404).send("Frontend files missing. Please check deployment.");
+    }
+    res.sendFile(indexPath);
 });
 
 if (require.main === module) {
